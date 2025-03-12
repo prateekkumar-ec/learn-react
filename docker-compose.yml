@@ -1,0 +1,33 @@
+version: "3.8"
+
+services:
+  backend:
+    build: ./backend
+    container_name: learn-react-backend
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env
+    ports:
+      - "5000:5001"
+    depends_on:
+      - mongo
+
+  frontend:
+    build: ./frontend
+    container_name: learn-react-frontend
+    restart: unless-stopped
+    ports:
+      - "5500:5173"
+    depends_on:
+      - backend
+    volumes:
+    - ./frontend:/app 
+
+  mongo:
+    image: mongo
+    container_name: learn-react-mongo
+    restart: unless-stopped
+    ports:
+      - "28017:27017"
+    volumes:
+      - /mnt/learn-react/mongo-data:/data/db
