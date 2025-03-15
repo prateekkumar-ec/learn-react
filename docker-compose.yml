@@ -21,8 +21,6 @@ services:
       - "5500:80"
     depends_on:
       - backend
-    volumes:
-    - ./frontend:/app 
 
   mongo:
     image: mongo
