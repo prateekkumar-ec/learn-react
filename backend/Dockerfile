@@ -13,7 +13,6 @@ COPY . .
 
 # Compile TypeScript → JavaScript
 RUN npm run build
-RUN ls -l /app/dist
 
 # ====== Stage 2: Production Stage ======
 FROM node:18
@@ -31,7 +30,7 @@ COPY --from=builder /app/dist ./dist
 EXPOSE 5001
 
 # Start the compiled JS server
-CMD ["node", "dist/server.js"]
+CMD ["sh", "-c", "npm run start"]
 
 
 
