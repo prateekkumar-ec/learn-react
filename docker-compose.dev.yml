@@ -2,7 +2,7 @@ services:
   backend:
     build:
       context: ./backend
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     container_name: learn-react-backend
     restart: unless-stopped
     env_file:
@@ -11,24 +11,30 @@ services:
       - "5000:5000"
     depends_on:
       - mongo
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
    
 
   frontend:
     build:
       context: ./frontend
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     container_name: learn-react-frontend
     restart: unless-stopped
     ports:
-      - "5500:80"
+      - "5173:5173"
     depends_on:
       - backend
+    volumes:
+      - /app/node_modules
+      - ./frontend:/app
 
   mongo:
     image: mongo
     container_name: learn-react-mongo
     restart: unless-stopped
     ports:
-      - "28018:27017"
+      - "27018:27017"
     volumes:
       - /mnt/learn-react/mongo-data:/data/db

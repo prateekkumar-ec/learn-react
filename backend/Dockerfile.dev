@@ -1,0 +1,8 @@
+# Local
+FROM node:18
+WORKDIR /app
+COPY package.json tsconfig.json ./
+RUN npm install
+COPY . .
+CMD ["sh", "-c", "npm run dev"]
+EXPOSE 5000

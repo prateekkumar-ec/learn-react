@@ -6,8 +6,7 @@ WORKDIR /app
 
 # Copy package files and install dependencies
 COPY package.json package-lock.json ./
-RUN npm install  # Install ALL dependencies (including dev for TypeScript)
-
+RUN npm ci
 # Copy the rest of the application
 COPY . .
 
@@ -21,27 +20,13 @@ WORKDIR /app
 
 # Copy only necessary files from builder stage
 COPY --from=builder /app/package.json /app/package-lock.json ./
-RUN npm install --omit=dev  # Install only production dependencies
-
-# Copy the compiled JavaScript files and other necessary files
 COPY --from=builder /app/dist ./dist
 
+# Reinstall only production dependencies
+RUN npm ci --omit=dev  
+
 # Expose backend port
-EXPOSE 5001
+EXPOSE 5000
 
 # Start the compiled JS server
-CMD ["sh", "-c", "npm run start"]
-
-
-
-
-
-
-# Local
-# FROM node:18
-# WORKDIR /app
-# COPY package.json tsconfig.json ./
-# RUN npm install
-# COPY . .
-# CMD ["sh", "-c", "npm run dev"]
-# EXPOSE 5001
+CMD ["node", "dist/server.js"]
